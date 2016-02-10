@@ -25,9 +25,6 @@ public class Compute
 	public static void main(String[] args) 
   {	
 		Compute c = new Compute ();
-		System.out.println (c.chebyshev(10,0.785398));
-		//System.out.println (c.factorial(25).toString());
-		//System.out.println (c.cos(32, 'd'));
 		System.out.println (c.pi);
 		System.out.println (c.ln2);
 		System.out.println (c.factorial(5));
