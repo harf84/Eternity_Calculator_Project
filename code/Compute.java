@@ -19,7 +19,7 @@ public class Compute
 	public Compute ()
   {
 		computePi();
-    computeLn2();
+        computeLn2();
 	}
 
 	public static void main(String[] args) 
@@ -233,19 +233,9 @@ public class Compute
 	//ln(x); 
 	public double ln(double z)
   {
-		//return 2*ln_helper1(z,7);
 		return ln_helper2(z);
 	}
 	
-  //based on the area hyperbolic tangent function
-	//ln(z)=2*[sum of series from n=0, infinity][(1/2n+1)*[((z-1)/(z+1))^(2n+1)]
-	private  double ln_helper1(double z, int n)
-  {
-		if (n == 0) return 1;
-
-		return ((1.0 / (2 * n + 1)) * computePowers(((z - 1) / (z + 1)), 2 * n + 1)) + ln_helper1(z, n - 1);
-	}
-
 	//based on arithmetic-geometric mean
 	//https://en.wikipedia.org/wiki/Arithmetic–geometric_mean#Other_applications
 	//https://en.wikipedia.org/wiki/Logarithm#Calculation
