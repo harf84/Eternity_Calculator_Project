@@ -54,7 +54,7 @@ public class CalculatorGui extends Application{
 	/**
 	 * Gui Attributes
 	 */
-	protected Calculator compute = new Calculator ();//to compute stuff!
+	protected Calculator calculate = new Calculator ();//to compute stuff!
 	protected String expr ="";//expression to be evaluated
 	protected Queue <String> tokens = new LinkedList ();
 	protected final int ALLOC =22;
@@ -230,7 +230,7 @@ public class CalculatorGui extends Application{
 				//evalate expression
 				try{
 					tokenize();
-					String res=compute.evalTokens(tokens);
+					String res=calculate.evalTokens(tokens);
 					input.setText(res);
 					result=res;
 					evaluated=true;
@@ -266,11 +266,11 @@ public class CalculatorGui extends Application{
 			else if (expr.charAt(i) == 'p' || expr.charAt(i) == 's' || expr.charAt(i) == 'l'){
 				if (i+3 < expr.length() && expr.substring(i, i+4).equals("powX")){str="^";i+=3;}
 				else if (i+4 < expr.length() && expr.substring(i, i+5).equals("pow10")){tokens.add("10");str="^";i+=4;}
-				else if (i+1 < expr.length() && expr.substring(i, i+2).equals("pi")){str=""+compute.compute.pi;i+=1;}
+				else if (i+1 < expr.length() && expr.substring(i, i+2).equals("pi")){str=""+calculate.compute.pi;i+=1;}
 				else if (i+3 < expr.length() && expr.substring(i, i+4).equals("sqrt")){str="sqrt";i+=3;}
 				else if (i+2 < expr.length() && expr.substring(i, i+3).equals("sin")){str="sin";i+=2;}
 				else if (i+2 < expr.length() && expr.substring(i, i+3).equals("log")){str="log";i+=2;}
-				else if (i+2 < expr.length() && expr.substring(i, i+3).equals("ln2")){str=""+compute.compute.ln2;i+=2;}
+				else if (i+2 < expr.length() && expr.substring(i, i+3).equals("ln2")){str=""+calculate.compute.ln2;i+=2;}
 			}
 			else str+= this.expr.charAt(i);
 			tokens.add(str);
