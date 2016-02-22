@@ -8,7 +8,8 @@ import java.math.RoundingMode;
  * 
  * @author Fadi Hariri, Maryna Kalachova, Nicholas Hillier, Navdeep Singh, Savithru Teja
  * @date January 12, 2016
- * @Description  methods for computations required for the Calculator project delivered for the Software Engineering course
+ * @Description  This class provides a set of methods that computes the constants pi and the natural logarithm of 2, 
+ * as well as the square root, powers of 10, powers of a variable, sine, factorials and logarithms.
  *
  */
 public class Compute 
@@ -16,31 +17,13 @@ public class Compute
 	protected double pi;
 	protected double ln2;
 
+	/**
+	 * Initialize the computation of pi and ln2 constants.
+	 */
 	public Compute ()
   {
 		computePi();
         computeLn2();
-	}
-
-	public static void main(String[] args) 
-  {	
-		Compute c = new Compute ();
-		System.out.println (c.pi);
-		System.out.println (c.ln2);
-		System.out.println (c.factorial(4));
-		System.out.println(c.sin(45));
-		System.out.println (c.computePowers (2, 100));
-		int [] arr = c.getFraction(-2.5);
-		System.out.println(arr[0]+"/"+arr[1]);
-		System.out.println (c.powerOfX (3, 5.95));
-
-		System.out.println (c.computePowers (2, -3));
-		double [] arr2 = {9, 2, 5, 4, 12, 7, 8, 11, 9, 3, 7, 4, 12, 5, 4, 10, 9, 6, 9, 4};
-		
-		System.out.println ("ln:"+c.ln(25));
-		//System.out.println (arithGeomMean (24,6));
-		System.out.println ("log10: "+c.log10(1000));
-		System.out.println (c.nthroot(2,2));
 	}
 
 	/**
@@ -175,10 +158,12 @@ public class Compute
 		return n == 1 ? val : nthroot(n,val);
 	}
 
-	/**
-	 * Compute Powers
-	 */
+
 	//10^x 
+	/**
+	 * @param x a double
+	 * @return double corresponding to 10^x
+	 */
 	public  double powerOfTen (double x)
   {
 		return computePowers(10,x);
@@ -186,12 +171,21 @@ public class Compute
 	
 	
   //√x 
+	/**
+	 * @param x a double
+	 * @return double corresponding to √x 
+	 */
 	public  double squareRoot (double x)
   {
 		return nthroot (2, x);
 	}
 	
 	// x^y
+	/**
+	 * @param x a double representing a base
+	 * @param y a double representing a power
+	 * @return double corresponding to x^y
+	 */
 	public  double powerOfX (double x, double y)
   {
 		return computePowers (x,y);
@@ -202,7 +196,7 @@ public class Compute
 	 */
 
 	//ln(x); 
-	public double ln(double z)
+	private double ln(double z)
   {
 		return ln_helper2(z);
 	}
@@ -248,6 +242,10 @@ public class Compute
 	}
 
 	//log10(x)
+	/**
+	 * @param x double representing a power
+	 * @return double corresponding to log10(x)
+	 */
 	public  double log10 (double x)
   {
 		//ln(x)/ln(10)
@@ -289,6 +287,10 @@ public class Compute
 	 * source:http://mathonweb.com/help_ebook/html/algorithms.htm
 	 * 
 	 */
+	/**
+	 * @param angle in degrees
+	 * @return double corresponding to sin(angle). The method converts the angle to radians prior to computation.
+	 */
 	public double sin (double angle){
 		double ang= angle%360; //make in range of 360
 		double ang2= ang%180; //make in range of 180
@@ -306,8 +308,9 @@ public class Compute
 	
 	/**Factorial
 	 * 
-	 * @param some value val
-	 * @return factorial of val
+	 * @param val a non-floating point double
+	 * @return double Factorial of val. 
+	 * @throws StackOverFlow exception with floating point input values. 
 	 */
 	public double factorial (double val){
 		if (val == 1)return val;

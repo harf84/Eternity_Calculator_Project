@@ -7,6 +7,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
+/**
+ * @author Fadi Hariri
+ * @date January 12, 2016
+ * @Description: This class pipelines the queue of tokens fed by CalculatorGui through a series of methods that converts 
+ * the infix tokens queue into a postfix queue that is then evaluated by the evalTokens () function call. 
+ * This class contains the compute attribute, an instance of the Compute class, to calculate transcendental functions.
+ *
+ */
 public class Calculator {
 
 	//==+==+==+==+==+==+==+Class definition goes here+==+==+==+==+==+==+==+
@@ -17,6 +28,11 @@ public class Calculator {
 	public Calculator (){initialize();}
 
 	///set expression and evaluate 
+	/**
+	 * @param tokens queue 
+	 * @return String output of evaluated expression
+	 * @Description Converts tokens infix queue to postfix queue then evaluates the expression.
+	 */
 	public String evalTokens (Queue <String> tokens){
 		postfix = infixToPostfix(tokens);
 		//for (String s : postfix)System.out.print(s);System.out.println();
@@ -87,7 +103,10 @@ public class Calculator {
 	//evaluate
 	/**
 	 * 
-	 * @return value of expression from infixQueue
+	 * @return Value of expression after evaluating infixQueue
+	 * @Description The expression is computed based on operator priority. Special functions are computed using an instance of
+	 * the Compute class.
+	 * @throws IllegalExpressionException if the expression is erroneuosly constructed.
 	 */
 	public double evaluate (){
 		double val = 0;
@@ -101,7 +120,13 @@ public class Calculator {
 			}catch (NumberFormatException e){}
 
 			if (op.equals("!")){//factorial
-				val =compute.factorial(operands.pop());
+				try {val =compute.factorial(operands.pop());}
+				catch(java.lang.StackOverflowError e){
+					Alert alert = new Alert (AlertType.ERROR);
+					alert.setTitle("Error!");alert.setHeaderText("Error!");
+					alert.setContentText("Error encountered in expression...");
+					alert.showAndWait();
+				}
 			}
 			else if (op.equals("sqrt")){
 				val=compute.squareRoot(operands.pop());

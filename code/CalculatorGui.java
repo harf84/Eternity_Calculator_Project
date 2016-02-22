@@ -41,10 +41,17 @@ import javafx.stage.Stage;
 
 /**
  * 
- * @author fadihariri
- * Main class for front end Calculator User Interface
+ * @author Fadi Hariri
+ * @date January 12, 2016
+ * Main class for front end Calculator User Interface.
+ * @Description:This class represents the main entry point to the Eternity application with the launch(args) function call in the public main 
+ * method.  CalculatorGui encompasses a set of user interface JavaFx attributes [buttons, input field, window etc..] integral to 
+ * properly launch the graphic user interface. Furthermore, the input field collects user input in the format of a mathematical 
+ * expression; this current version of Eternity supports input via button clicks. Inputted expressions are then parsed to generate 
+ * a queue of tokens via the tokenize() function call and fed to a Calculator object.
  *
  */
+
 public class CalculatorGui extends Application{
 
 	public static void main(String[] args) {
@@ -54,7 +61,8 @@ public class CalculatorGui extends Application{
 	/**
 	 * Gui Attributes
 	 */
-	protected Calculator calculate = new Calculator ();//to compute stuff!
+	
+	protected Calculator calculate = new Calculator ();//to calculate stuff!
 	protected String expr ="";//expression to be evaluated
 	protected Queue <String> tokens = new LinkedList ();
 	protected final int ALLOC =22;
@@ -74,8 +82,9 @@ public class CalculatorGui extends Application{
 	protected HashMap <String, String> func = new HashMap ();
 	protected HashMap <String, String> func2 = new HashMap ();
 	
-	/* 
+	/* (non-Javadoc)
 	 * Main logic goes in start method which launches a javafx application with a noneditable input field and a grid of buttons. 
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -85,6 +94,7 @@ public class CalculatorGui extends Application{
 		 * inputLabel image from:
 		 * source: http://www.freelargeimages.com/wp-content/uploads/2014/12/Black_background-8.jpg
 		 */
+		
 		initialize();//initial func map
 		grid.setHgap(10);
 		grid.setVgap(10);
@@ -147,6 +157,10 @@ public class CalculatorGui extends Application{
 	}
 	
 
+	/**
+	 * @param st, a String input
+	 * Description: This method will update the input field.
+	 */
 	private void setInput (String st){
 		String str="";
 		if (func.containsKey(st)){
@@ -251,6 +265,9 @@ public class CalculatorGui extends Application{
 		//System.out.println(expr);
 	}
 	
+	/**
+	 * tokenize: converts a string expression to a queue of tokens.
+	 */
 	private void tokenize (){
 		for (int i= 0; i < this.expr.length(); i++){
 			if (this.expr.charAt(i) == ' ')continue;
