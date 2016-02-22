@@ -183,7 +183,7 @@ public class CalculatorGui extends Application{
 		}
 		else {
 			String s = this.input.getText();
-			if (Character.isDigit(str.charAt(0))){
+            if (Character.isDigit(str.charAt(0)) || str2.equals("sqrt") || str2.equals("sin") || str2.equals("pi")|| str2.equals("log")|| str2.equals("ln2")){
 				this.input.setText(str);
 				expr=str2;
 			}

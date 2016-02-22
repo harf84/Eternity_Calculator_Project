@@ -294,7 +294,8 @@ public class Compute
 	public double sin (double angle){
 		double ang= angle%360; //make in range of 360
 		double ang2= ang%180; //make in range of 180
-		double a=degToRad(ang2);//convert to radians
+        double ang3=(ang2 > 180)? ang2-180:((ang2 > 90)?180-ang2:ang2);
+        double a=degToRad(ang3);//convert to radians
 		
 		double val=0;
 		int precision=1000;boolean alternate=true;
