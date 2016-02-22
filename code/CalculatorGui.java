@@ -176,14 +176,14 @@ public class CalculatorGui extends Application{
 		if (!evaluated){
 			String s = (this.input.getText().equals("0") && (Character.isDigit(str.charAt(0))
 					|| str2.equals("sqrt") || str2.equals("sin") || str2.equals("pi")|| 
-					str2.equals("log")|| str2.equals("ln2")))?"":this.input.getText();
+					str2.equals("log")|| str2.equals("ln2") || str2.equals("(")))?"":this.input.getText();
 			this.input.setText(s+str);
 			expr=(this.input.getText().equals("0") && Character.isDigit(str.charAt(0)))?str2:expr+str2;
 				
 		}
 		else {
 			String s = this.input.getText();
-            if (Character.isDigit(str.charAt(0)) || str2.equals("sqrt") || str2.equals("sin") || str2.equals("pi")|| str2.equals("log")|| str2.equals("ln2")){
+            if (Character.isDigit(str.charAt(0)) || str2.equals("sqrt") || str2.equals("sin") || str2.equals("pi")|| str2.equals("log")|| str2.equals("ln2") || str2.equals("(")){
 				this.input.setText(str);
 				expr=str2;
 			}
