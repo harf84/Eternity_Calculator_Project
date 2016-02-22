@@ -240,7 +240,7 @@ public class CalculatorGui extends Application{
 					alert.setTitle("Error!");alert.setHeaderText("Error!");
 					alert.setContentText("Error encountered in expression...");
 					alert.showAndWait();
-					myException.printStackTrace();
+					//myException.printStackTrace();
 				}
 			}
 			else{return;}
