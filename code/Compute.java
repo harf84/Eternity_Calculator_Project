@@ -1,18 +1,20 @@
+package iteration1;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
 /**
  * 
- * @author fadihariri
+ * @author Fadi Hariri, Maryna Kalachova, Nicholas Hillier, Navdeep Singh, Savithru Teja
  * @date January 12, 2016
  * @Description  methods for computations required for the Calculator project delivered for the Software Engineering course
  *
  */
 public class Compute 
 {
-	private double pi;
-	private double ln2;
+	protected double pi;
+	protected double ln2;
 
 	public Compute ()
   {
@@ -25,7 +27,8 @@ public class Compute
 		Compute c = new Compute ();
 		System.out.println (c.pi);
 		System.out.println (c.ln2);
-		System.out.println (c.factorial(5));
+		System.out.println (c.factorial(4));
+		System.out.println(c.sin(45));
 		System.out.println (c.computePowers (2, 100));
 		int [] arr = c.getFraction(-2.5);
 		System.out.println(arr[0]+"/"+arr[1]);
@@ -33,7 +36,7 @@ public class Compute
 
 		System.out.println (c.computePowers (2, -3));
 		double [] arr2 = {9, 2, 5, 4, 12, 7, 8, 11, 9, 3, 7, 4, 12, 5, 4, 10, 9, 6, 9, 4};
-		System.out.println (c.standardDev (arr2));
+		
 		System.out.println ("ln:"+c.ln(25));
 		//System.out.println (arithGeomMean (24,6));
 		System.out.println ("log10: "+c.log10(1000));
@@ -78,6 +81,8 @@ public class Compute
 			}
 		}
 
+	//minimize fraction [v imp]
+	if (fractional.length() > 3){fractional=fractional.substring(0,3);}
     //no fraction
 		if (Integer.parseInt(fractional) == 0)
     {
@@ -154,7 +159,7 @@ public class Compute
 		int [] assets = getFraction (x);
 
 		//a^(m/n) = (a^m)^(1/n) = nth root of (a^m)
-		double val = 1;//a=pi
+		double val = 1;
 		int m= (assets [0]<0)?-assets[0]:assets[0];
 		int n = assets [1];
 		
@@ -179,17 +184,6 @@ public class Compute
 		return computePowers(10,x);
 	}
 	
-  //π^x
-	public  double powerOfPi (double x)
-  {
-		return computePowers (this.pi, x);
-	}
-	
-  //e^x 
-	public  double powerofE (double x)
-  {
-		return computePowers (Math.E,x);
-	}
 	
   //√x 
 	public  double squareRoot (double x)
@@ -197,27 +191,6 @@ public class Compute
 		return nthroot (2, x);
 	}
 	
-  //σ (Standard Deviation)
-	//square root (1/N * for all X in array[sum += (Xi -mean)^2])
-	public  double standardDev (double [] values)
-  {
-		//compute average
-		double mean = 0;
-		for (int i=0; i < values.length; i++)
-    {
-      mean += values[i];
-    }
-
-		mean = mean/values.length;
-
-		double sum=0;
-		//compute sum of squares (Xi - mean)^2
-		for (int i=0; i < values.length; i++){sum += computePowers((values[i]-mean),2);}
-		
-    //compute SD
-		return nthroot(2, sum / values.length);
-	}
-
 	// x^y
 	public  double powerOfX (double x, double y)
   {
@@ -311,8 +284,42 @@ public class Compute
 
 	/**
 	 * Trigonometry
+	 * Taylor series
+	 * Preconditions: angle is in degree so convert to rads first
+	 * source:http://mathonweb.com/help_ebook/html/algorithms.htm
+	 * 
 	 */
-
+	public double sin (double angle){
+		double ang= angle%360; //make in range of 360
+		double ang2= ang%180; //make in range of 180
+		double a=degToRad(ang2);//convert to radians
+		
+		double val=0;
+		int precision=1000;boolean alternate=true;
+		for (int i=1; i <= precision; i+=2){
+			double temp=powerOfX(a,i)/factorial(i);
+			val =(alternate)?val+ temp:val-temp;
+			alternate=(alternate)?false:true;
+		}
+		return (ang > 180)?-val:val;//if angle [after minimization] is < 180 then return as is else return the symmetric value.
+	}
+	
+	/**Factorial
+	 * 
+	 * @param some value val
+	 * @return factorial of val
+	 */
+	public double factorial (double val){
+		if (val == 1)return val;
+		return val*factorial(val-1);
+	}
+	
+	/**
+	 * absolute value
+	 * @param a value x
+	 * @return absolute value of x
+	 */
+	private double abs (double x){return (x < 0)?-x:x;}
 	//helper functions to convert between degrees, dms (degree in hour minute sec), radians
 	private  double degToRad (double deg)
   {
@@ -339,17 +346,8 @@ public class Compute
   {
 		return new int []{1};
 	}
-
-	public BigDecimal factorial(int x)
-  {
-		BigDecimal d = BigDecimal.valueOf(1.0);
-
-		for (int i=1; i <= x; i++)
-    {
-			d = d.multiply(BigDecimal.valueOf(i));
-		}
-
-		return d;
+	private double invert (double d)
+	{
+		return 1/d;
 	}
-
 }
