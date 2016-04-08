@@ -65,7 +65,7 @@ public class Compute
 		}
 
 	//minimize fraction [v imp]
-	if (fractional.length() > 3){fractional=fractional.substring(0,3);}
+	if (fractional.length() > 3){fractional=fractional.substring(0,2);}
     //no fraction
 		if (Integer.parseInt(fractional) == 0)
     {
@@ -86,7 +86,7 @@ public class Compute
 		
     if (sign.equals("-"))
     {
-			return new int []{-((-decimal * denom/div)+(numerator/div)),denom/div};
+			return new int []{(decimal == 0 ? -1 : 1)*((-decimal * denom/div)+(numerator/div)),denom/div};
     }
 
 		return new int []{((decimal * denom/div)+(numerator/div)),denom/div};
@@ -149,7 +149,7 @@ public class Compute
     //compute a^m
 		for (int i=1; i <= m; i++)
     {
-      val *= a;
+		val *= a;
     }
 
 		if (assets[0] < 0)val = invert(val);
@@ -173,7 +173,7 @@ public class Compute
   //√x 
 	/**
 	 * @param x a double
-	 * @return double corresponding to √x 
+	 * @return double corresponding to _/x 
 	 */
 	public  double squareRoot (double x)
   {
@@ -261,7 +261,7 @@ public class Compute
 		double val=0;
 		int precision = 1000;
 		for (int i=0; i <= precision; i++){
-			val += (1/computePowers(16,i))*((4.0/(8*i+1))- (2.0/(8*i+4)) - (1.0/(8*i+5)) -(1.0/(8*i+6))  );
+			val += (1/computePowers(16,i))*((4.0/(8*i+1))- (2.0/(8*i+4)) - (1.0/(8*i+5)) -(1.0/(8*i+6)));
 		}
 		this.pi= val;
 	}
@@ -290,12 +290,14 @@ public class Compute
 	/**
 	 * @param angle in degrees
 	 * @return double corresponding to sin(angle). The method converts the angle to radians prior to computation.
+	 * 
 	 */
 	public double sin (double angle){
 		double ang= angle%360; //make in range of 360
 		double ang2= ang%180; //make in range of 180
-        double ang3=(ang2 > 90)?180-ang2:ang2;//make in range of 0-90
-        double a=degToRad(ang3);//convert to radians
+		//source:http://mathonweb.com/help_ebook/html/algorithms.htm
+		double ang3=(ang2 > 90)?180-ang2:ang2;
+		double a=degToRad(ang3);//convert to radians
 		
 		double val=0;
 		int precision=1000;boolean alternate=true;

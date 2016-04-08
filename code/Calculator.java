@@ -35,7 +35,7 @@ public class Calculator {
 	 */
 	public String evalTokens (Queue <String> tokens){
 		postfix = infixToPostfix(tokens);
-		//for (String s : postfix)System.out.print(s);System.out.println();
+		for (String s : postfix)System.out.print(s);System.out.println();
 		double d = evaluate();
 		return d+"";	
 	}
@@ -45,7 +45,7 @@ public class Calculator {
 	private Queue infixToPostfix(Queue <String> infixTokenQueue){
 		Queue <String> postfixQueue = new LinkedList ();//to store postfix tokens
 		Stack <String> opStack = new Stack();//to store intermediate operators
-
+		boolean isNegative = false;
 		int i=1;//track first element
 		while (!infixTokenQueue.isEmpty()){
 			String token = infixTokenQueue.peek();
@@ -58,7 +58,12 @@ public class Calculator {
 
 			//if (token is an operand)
 			if (Character.isDigit(token.charAt(0))){
-				postfixQueue.add(token);
+				if (isNegative){
+					postfixQueue.add("-"+token);
+					isNegative=false;
+				}
+				else { 
+					postfixQueue.add(token);}
 			}
 
 			//(token is a left parenthesis)
@@ -79,7 +84,7 @@ public class Calculator {
 					op = opStack.pop();
 				}
 			}
-
+			
 			//else token must be an operator
 			else{
 				while (!opStack.isEmpty() && opStack.peek().charAt(0) != '('
@@ -92,6 +97,11 @@ public class Calculator {
 				opStack.push(token);
 			}
 			infixTokenQueue.poll();
+			
+			if (token.charAt(0) == '^' && infixTokenQueue.peek().charAt(0) == '-'){
+				infixTokenQueue.poll();
+				isNegative=true;
+			}
 		}
 		while (!opStack.isEmpty()){
 			postfixQueue.add(opStack.peek());
