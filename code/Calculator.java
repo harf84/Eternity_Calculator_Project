@@ -1,28 +1,22 @@
-package iteration1;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
 /**
  * @author Fadi Hariri
- * @date January 12, 2016
- * @Description: This class pipelines the queue of tokens fed by CalculatorGui through a series of methods that converts 
+ * This class pipelines the queue of tokens fed by CalculatorGui through a series of methods that converts
  * the infix tokens queue into a postfix queue that is then evaluated by the evalTokens () function call. 
  * This class contains the compute attribute, an instance of the Compute class, to calculate transcendental functions.
  *
  */
 public class Calculator {
 
-	//==+==+==+==+==+==+==+Class definition goes here+==+==+==+==+==+==+==+
-	private static HashMap <String, Integer> precedence = new HashMap();
-	private Queue <String>postfix;
+	private static HashMap<String, Integer> precedence = new HashMap<>();
+	private Queue postfix;
 	Compute compute = new Compute ();//will compute all functions
 
 	public Calculator (){initialize();}
@@ -31,11 +25,12 @@ public class Calculator {
 	/**
 	 * @param tokens queue 
 	 * @return String output of evaluated expression
-	 * @Description Converts tokens infix queue to postfix queue then evaluates the expression.
+	 * Converts tokens infix queue to postfix queue then evaluates the expression.
 	 */
 	public String evalTokens (Queue <String> tokens){
 		postfix = infixToPostfix(tokens);
-		for (String s : postfix)System.out.print(s);System.out.println();
+		postfix.forEach(System.out::print);
+		System.out.println();
 		double d = evaluate();
 		return d+"";	
 	}
@@ -43,8 +38,8 @@ public class Calculator {
 	//infix to postfix
 	//convert an infix queue to a postfix queue
 	private Queue infixToPostfix(Queue <String> infixTokenQueue){
-		Queue <String> postfixQueue = new LinkedList ();//to store postfix tokens
-		Stack <String> opStack = new Stack();//to store intermediate operators
+		Queue <String> postfixQueue = new LinkedList<>();//to store postfix tokens
+		Stack <String> opStack = new Stack<>();//to store intermediate operators
 		boolean isNegative = false;
 		int i=1;//track first element
 		while (!infixTokenQueue.isEmpty()){
@@ -84,9 +79,9 @@ public class Calculator {
 					op = opStack.pop();
 				}
 			}
-			
-			//else token must be an operator
-			else{
+
+            //else token must be an operator
+            else{
 				while (!opStack.isEmpty() && opStack.peek().charAt(0) != '('
 						&& precedence.get(token) >= precedence.get(opStack.peek())){
 					//System.out.println (token+"; "+opStack.peek().charAt(0));
@@ -110,57 +105,56 @@ public class Calculator {
 		return postfixQueue;
 	}
 
-	//evaluate
 	/**
-	 * 
 	 * @return Value of expression after evaluating infixQueue
-	 * @Description The expression is computed based on operator priority. Special functions are computed using an instance of
+	 * The expression is computed based on operator priority. Special functions are computed using an instance of
 	 * the Compute class.
-	 * @throws IllegalExpressionException if the expression is erroneuosly constructed.
 	 */
 	public double evaluate (){
 		double val = 0;
-		Stack <Double> operands = new Stack ();
-		if (postfix.size() == 1)operands.push(Double.parseDouble(postfix.poll()));
+		Stack <Double> operands = new Stack<>();
+		if (postfix.size() == 1)operands.push(Double.parseDouble((String) postfix.poll()));
 		while (!postfix.isEmpty()){
-			String op = postfix.poll();
+			String op = (String) postfix.poll();
 			try {
 				operands.push(Double.parseDouble(op));
 				continue;
-			}catch (NumberFormatException e){}
+			}catch (NumberFormatException e){
+                System.out.println(e.getMessage());
+            }
 
-			if (op.equals("!")){//factorial
-				try {val =compute.factorial(operands.pop());}
-				catch(java.lang.StackOverflowError e){
-					Alert alert = new Alert (AlertType.ERROR);
-					alert.setTitle("Error!");alert.setHeaderText("Error!");
-					alert.setContentText("Error encountered in expression...");
-					alert.showAndWait();
-				}
-			}
-			else if (op.equals("sqrt")){
-				val=compute.squareRoot(operands.pop());
-			}
-			else if (op.equals("sin")){
-				//System.out.print ("sin"+operands.peek()+"=");
-				val=compute.sin(operands.pop());
-				//System.out.println (val);
-			}
-
-			else if (op.equals("log")){
-				val=compute.log10(operands.pop());
-			}
-
-			else val=calculate (op.charAt(0), operands.pop(), operands.pop());
+            switch (op) {
+                case "!": //factorial
+                    try {
+                        val = compute.factorial(operands.pop());
+                    } catch (StackOverflowError e) {
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Error!");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Error encountered in expression...");
+                        alert.showAndWait();
+                    }
+                    break;
+                case "sqrt":
+                    val = compute.squareRoot(operands.pop());
+                    break;
+                case "sin":
+                    val = compute.sin(operands.pop());
+                    break;
+                case "log":
+                    val = compute.log10(operands.pop());
+                    break;
+                default:
+                    val = calculate(op.charAt(0), operands.pop(), operands.pop());
+                    break;
+            }
 			operands.push(val);
 
 		}
 		return operands.pop();
 	}
 
-
 	private double calculate (char op, double a, double b){
-		//System.out.println(b+""+op+" "+a);
 		double val=0;
 		if (op == '+')val+= b+a;
 		else if (op == '-')val+= b-a;

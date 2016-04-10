@@ -1,9 +1,8 @@
 .root {
-     -fx-background-image: url("background.jpg");
+     -fx-background-image: url("../images/background.jpg");
      -fx-control-inner-background: derive(-fx-base,80%);
      -fx-control-inner-background-alt: derive(-fx-control-inner-background,-2%);
 }
-
 
 #input{
   -fx-font-size:30;

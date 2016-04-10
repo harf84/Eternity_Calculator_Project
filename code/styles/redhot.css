@@ -1,5 +1,5 @@
 .root {
-     -fx-background-image: url("background-calm.jpg");
+     -fx-background-image: url("../images/red_background.jpg");
      -fx-control-inner-background: derive(-fx-base,80%);
      -fx-control-inner-background-alt: derive(-fx-control-inner-background,-2%);
 }
@@ -9,19 +9,19 @@
   -fx-font-size:30;
   -fx-highlight-fill: null;
   -fx-highlight-text-fill: null;
-  -fx-text-fill: grey;
-  -fx-background-color: blue;
+  -fx-text-fill: white;
+  -fx-background-color: green;
 }
 
 .button {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
     -fx-font-size:20;
-    -fx-background-color: linear-gradient(#ff9900, #ffa31a);
+    -fx-background-color: linear-gradient( #00e600, #00ff00);
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(#ffa31a, #e68a00);
+    -fx-background-color: linear-gradient(#00ff00, #00b300);
 }
