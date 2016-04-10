@@ -155,7 +155,7 @@ public class Calculator {
 	}
 
 	private double calculate (char op, double a, double b){
-		double val=0;
+		double val = 0;
 		if (op == '+')val+= b+a;
 		else if (op == '-')val+= b-a;
 		else if (op == '*')val+= b*a;

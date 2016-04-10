@@ -377,7 +377,8 @@ public class CalculatorGui extends Application {
             input.setText(result);
         }
         else if (input.getText().length() == ALLOC || btnText.equals("=")) {
-            if (btnText.equals("=")) {
+            if (evaluated && btn.getText().equals("="))input.setText(result);
+            else if (btn.getText().equals("=")){
                 String currInput = input.getText();
                 try {
                     tokenize();
