@@ -1,7 +1,6 @@
 /**
  * @author Fadi Hariri, Maryna Kalachova, Nicholas Hillier, Navdeep Singh, Savithru Teja
- * @date January 12, 2016
- * @Description This class provides a set of methods that computes the constants pi and the natural logarithm of 2,
+ * This class provides a set of methods that computes the constants pi and the natural logarithm of 2,
  * as well as the square root, powers of 10, powers of a variable, sine, factorials and logarithms.
  */
 public class Compute {
@@ -13,7 +12,7 @@ public class Compute {
      */
     public Compute() {
         computePi();
-        computeLn2();
+        computeLogN();
     }
 
     /**
@@ -57,7 +56,6 @@ public class Compute {
             return new int[]{decimal, 1};
         }
 
-        //System.out.println (fractional);
         String tens = "1";
 
         for (int i = 0; i < fractional.length(); i++) {
@@ -65,17 +63,17 @@ public class Compute {
         }
 
         int numerator = Integer.parseInt(fractional);
-        int denom = Integer.parseInt(tens);
-        int div = gcd(numerator, denom);
+        int denominator = Integer.parseInt(tens);
+        int div = greatestCommonDenominator(numerator, denominator);
 
         if (sign.equals("-")) {
-            return new int[]{(decimal == 0 ? -1 : 1) * ((-decimal * denom / div) + (numerator / div)), denom / div};
+            return new int[]{(decimal == 0 ? -1 : 1) * ((-decimal * denominator / div) + (numerator / div)), denominator / div};
         }
 
-        return new int[]{((decimal * denom / div) + (numerator / div)), denom / div};
+        return new int[]{((decimal * denominator / div) + (numerator / div)), denominator / div};
     }
 
-    private int gcd(int x, int y) {
+    private int greatestCommonDenominator(int x, int y) {
         int div = 1;
         int min = (x < y) ? x : y;
 
@@ -90,7 +88,7 @@ public class Compute {
      * nth-root algorithm
      * source: http://rosettacode.org/wiki/Nth_root#Java
      */
-    private double nthroot(int n, double x) {
+    private double nthRoot(int n, double x) {
         if (n % 2 == 0 && x < 0) {
             System.out.println("Error! can not compute root...");
             System.exit(0);
@@ -98,21 +96,20 @@ public class Compute {
 
         int np = n - 1;
         double g1 = x;
-        double g2 = iter(g1, np, n, x);
+        double g2 = iterate(g1, np, n, x);
 
         while (g1 != g2) {
-            g1 = iter(g1, np, n, x);
-            g2 = iter(iter(g2, np, n, x), np, n, x);
+            g1 = iterate(g1, np, n, x);
+            g2 = iterate(iterate(g2, np, n, x), np, n, x);
         }
 
         return g1;
     }
 
-    private double iter(double g, int np, int n, double x) {
+    private double iterate(double g, int np, int n, double x) {
         return (np * g + x / Math.pow(g, np)) / n;
     }
 
-    //compute a^X
     private double computePowers(double a, double x) {
         if (x == 0) return 1;
 
@@ -132,11 +129,8 @@ public class Compute {
         if (assets[0] < 0) val = invert(val);
         //compute nth root of (a^m)
 
-        return n == 1 ? val : nthroot(n, val);
+        return n == 1 ? val : nthRoot(n, val);
     }
-
-
-    //10^x
 
     /**
      * @param x a double
@@ -146,18 +140,13 @@ public class Compute {
         return computePowers(10, x);
     }
 
-
-    //√x
-
     /**
      * @param x a double
      * @return double corresponding to _/x
      */
     public double squareRoot(double x) {
-        return nthroot(2, x);
+        return nthRoot(2, x);
     }
-
-    // x^y
 
     /**
      * @param x a double representing a base
@@ -171,59 +160,51 @@ public class Compute {
     /**
      * Logarithms
      */
-
-    //ln(x);
-    private double ln(double z) {
-        return ln_helper2(z);
+    private double logN(double z) {
+        return logNHelper(z);
     }
 
     //based on arithmetic-geometric mean
     //https://en.wikipedia.org/wiki/Arithmetic–geometric_mean#Other_applications
     //https://en.wikipedia.org/wiki/Logarithm#Calculation
-    //ln(x)=[pi/(2*M(1,(2^(2-m)) /x))]-m*ln(2)
+    //logN(x)=[pi/(2*M(1,(2^(2-m)) /x))]-m*logN(2)
     //m is such that x*2^m > 2^(p/2); p is precision
-    private double ln_helper2(double x) {
-        //compute m with 0.000000001 precision
+    private double logNHelper(double x) {
         double m = 0;
         double p = 70;
         double precision = 100000000000000.0;
 
-        //System.out.println (x*computePowers (2,m));
-        //System.out.println (computePowers (2, p/2));
         while (x * computePowers(2, m) < computePowers(2, p / 2)) {
             m += 1;
         }
 
         double pi = this.pi;
-        double agm = arithGeomMean(1, (computePowers(2, (2 - m))) / x, precision);
-        m *= 0.6931471805599453;// (m*ln(2))
-        return (pi / (2 * agm)) - m;
+        double mean = mean(1, computePowers(2, (2 - m)) / x, precision);
+        m *= 0.6931471805599453;
+        return (pi / (2 * mean)) - m;
     }
 
-    private double arithGeomMean(double x, double y, double precision) {
-        double a = x, g = y;//a0, g0
-        double tempa = a, tempg = g;
-        //precision 8 digits
-        while (a * (precision) != g * (precision)) {
-            a = 0.5 * (tempa + tempg);
-            g = nthroot(2, tempa * tempg);
-            tempa = a;
-            tempg = g;
+    private double mean(double x, double y, double precision) {
+        double output = x;
+        double g = y;
+        double xTemp = output;
+        double yTemp = g;
+
+        while (output * precision != g * precision) {
+            output = 0.5 * (xTemp + yTemp);
+            g = nthRoot(2, xTemp * yTemp);
+            xTemp = output;
+            yTemp = g;
         }
 
-        return a;
+        return output;
     }
-
-    //log10(x)
 
     /**
      * @param x double representing a power
      * @return double corresponding to log10(x)
      */
-    public double log10(double x) {
-        //ln(x)/ln(10)
-        return ln(x) / ln(10);
-    }
+    public double log10(double x) { return logN(x) / logN(10); }
 
     /**
      * Compute ln2, pi
@@ -240,11 +221,10 @@ public class Compute {
     }
 
     //source:http://www.mathisfunforum.com/viewtopic.php?id=12674
-    private void computeLn2() {
+    private void computeLogN() {
         double val = 0;
         int p = 1000;
 
-        //compute ln2
         for (int i = 1; i <= p; i++) {
             val += 1 / (computePowers(2, i) * i);
         }
@@ -276,7 +256,7 @@ public class Compute {
         for (int i = 1; i <= precision; i += 2) {
             double temp = powerOfX(a, i) / factorial(i);
             val = (alternate) ? val + temp : val - temp;
-            alternate = (alternate) ? false : true;
+            alternate = !alternate;
         }
         return (ang > 180) ? -val : val;//if angle [after minimization] is < 180 then return as is else return the symmetric value.
     }
@@ -303,7 +283,6 @@ public class Compute {
 
     //helper functions to convert between degrees, dms (degree in hour minute sec), radians
     private double degToRad(double deg) {
-        //pi= 180;
         return deg * pi / 180;
     }
 

@@ -57,7 +57,7 @@ public class CalculatorGui extends Application {
     protected TextField input = new TextField("");
     protected GridPane grid = new GridPane();
     protected Button[] mainPad = new Button[30];
-    protected String[] labelsmain = {
+    protected String[] mainLabel = {
             "log\u2081\u2080X", "0", ".", "C", "+", "=",
             "10\u02e3", "1", "2", "3", "-", "Ans",
             "X\u02b8", "4", "5", "6", "*", "%",
@@ -221,7 +221,7 @@ public class CalculatorGui extends Application {
         grid.setPadding(new Insets(30, 30, 30, 30));
 
         //input label
-        input.setText("0");
+        setInput("0");
         input.setEditable(false);
         input.setPrefWidth(550);
         input.setPrefHeight(90);
@@ -243,7 +243,7 @@ public class CalculatorGui extends Application {
                 index++;
             }
 
-            mainPad[i] = new Button(labelsmain[i]);
+            mainPad[i] = new Button(mainLabel[i]);
             mainPad[i].setPrefSize(100, 100);
             mainPad[i].setPrefSize(100, 100);
 
@@ -272,7 +272,6 @@ public class CalculatorGui extends Application {
 
         primaryStage.setResizable(false);
         primaryStage.show();
-
     }
 
     private void setSheet(Scene scene, String resource) {
@@ -282,37 +281,33 @@ public class CalculatorGui extends Application {
 
     /**
      * @param st, a String input
-     *            Description: This method will update the input field.
+     * This method will update the input field.
      */
     private void setInput(String st) {
-        String str;
-        if (func.containsKey(st)) {
-            str = func.get(st);
-        } else str = st;
+        String str = func.containsKey(st) ? func.get(st) : st;
         String str2 = str;
 
-        if (str.equals("powX") || str.equals("pow10") || str.equals("sqrt")
-                || str.equals("log") || str.equals("/") || str.equals("pi")) {
+        if (str.equals("powX") || str.equals("pow10") || str.equals("sqrt") || str.equals("log") || str.equals("/") || str.equals("pi")) {
             str = func.get(str);
         }
 
         if (!evaluated) {
 
-            String s = (this.input.getText().equals("0") && (Character.isDigit(str.charAt(0))
+            String s = (input.getText().equals("0") && (Character.isDigit(str.charAt(0))
                     || str2.equals("sqrt") || str2.equals("sin") || str2.equals("pi") ||
-                    str2.equals("log") || str2.equals("ln2") || str2.equals("("))) ? "" : this.input.getText();
-            this.input.setText(s + str);
-            expr = (this.input.getText().equals("0") && Character.isDigit(str.charAt(0))) ? str2 : expr + str2;
+                    str2.equals("log") || str2.equals("ln2") || str2.equals("("))) ? "" : input.getText();
+            input.setText(s + str);
+            expr = (input.getText().equals("0") && Character.isDigit(str.charAt(0))) ? str2 : expr + str2;
 
         } else {
-            String s = this.input.getText();
+            String inputText = input.getText();
             if (Character.isDigit(str.charAt(0)) || str2.equals("sqrt") || str2.equals("sin") || str2.equals("pi") ||
                     str2.equals("log") || str2.equals("ln2") || str2.equals("(")) {
-                this.input.setText(str);
+                input.setText(str);
                 expr = str2;
             } else {
-                this.input.setText(s + str);
-                expr += s + str2;
+                this.input.setText(inputText + str);
+                expr += inputText + str2;
             }
             evaluated = false;
         }
@@ -374,11 +369,13 @@ public class CalculatorGui extends Application {
             tokens = new LinkedList<>();
         }
         else if (btnText.equals("Ans")){
-            input.setText(result);
+            setInput(result);
         }
         else if (input.getText().length() == ALLOC || btnText.equals("=")) {
-            if (evaluated && btn.getText().equals("="))input.setText(result);
-            else if (btn.getText().equals("=")){
+            if (evaluated && btnText.equals("=")) {
+                input.setText(result);
+            }
+            else if (btnText.equals("=")){
                 String currInput = input.getText();
                 try {
                     tokenize();

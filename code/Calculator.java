@@ -30,9 +30,8 @@ public class Calculator {
 	public String evalTokens (Queue <String> tokens){
 		postfix = infixToPostfix(tokens);
 		postfix.forEach(System.out::print);
-		System.out.println();
 		double d = evaluate();
-		return d+"";	
+		return d + "";
 	}
 
 	//infix to postfix
@@ -60,8 +59,6 @@ public class Calculator {
 				else { 
 					postfixQueue.add(token);}
 			}
-
-			//(token is a left parenthesis)
 			else if (token.charAt(0) == '('){
 				opStack.push(token);
 				infixTokenQueue.poll();
@@ -71,7 +68,6 @@ public class Calculator {
 				}
 				continue;
 			}
-			//(token is a right parenthesis)
 			else if (token.charAt(0) == ')'){
 				String op = opStack.pop();
 				while (!opStack.isEmpty() && op.charAt(0) != '('){
@@ -79,12 +75,9 @@ public class Calculator {
 					op = opStack.pop();
 				}
 			}
-
-            //else token must be an operator
             else{
 				while (!opStack.isEmpty() && opStack.peek().charAt(0) != '('
 						&& precedence.get(token) >= precedence.get(opStack.peek())){
-					//System.out.println (token+"; "+opStack.peek().charAt(0));
 					postfixQueue.add(opStack.peek());
 					opStack.pop();
 
@@ -156,21 +149,29 @@ public class Calculator {
 
 	private double calculate (char op, double a, double b){
 		double val = 0;
-		if (op == '+')val+= b+a;
-		else if (op == '-')val+= b-a;
-		else if (op == '*')val+= b*a;
-		else if (op == '/')val+= b/a;
-		else if (op == '^')val+= compute.powerOfX(b, a);
-		else if (op == '%')val+= b%a;
+
+        switch(op){
+            case '+': val += b+a; break;
+            case '-': val += b-a; break;
+            case '*': val += b*a; break;
+            case '/': val += b/a; break;
+            case '^': val += compute.powerOfX(b, a); break;
+            case '%': val += b%a; break;
+        }
 		return val;
 	}
 
 	private static void initialize (){
 		//1 is highest --> 8 is lowest
-		precedence.put("!",1);precedence.put("sqrt", 1);
-		precedence.put("sin", 1);precedence.put("log", 1);
-		precedence.put("^", 2);precedence.put("*",3);
-		precedence.put("/",3 );precedence.put("%",3 );
-		precedence.put("+", 4);precedence.put("-",4);
+		precedence.put("!",1);
+		precedence.put("sqrt", 1);
+		precedence.put("sin", 1);
+		precedence.put("log", 1);
+		precedence.put("^", 2);
+		precedence.put("*",3);
+		precedence.put("/",3 );
+        precedence.put("%",3 );
+		precedence.put("+", 4);
+        precedence.put("-",4);
 	}
 }
