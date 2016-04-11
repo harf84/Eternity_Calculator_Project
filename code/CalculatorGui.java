@@ -386,21 +386,29 @@ public class CalculatorGui extends Application {
                     expr = "";
                     tokens = new LinkedList<>();
                     historyMap.put(currInput, result);
-                } catch (Exception myException) {
+                } catch(ComputationException ex){
+                    historyMap.put(currInput, "Computation Error!");
+                    showAlert("Computation Error!", ex.getMessage());
+                }
+                catch (Exception myException) {
                     historyMap.put(currInput, "Syntax Error!");
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error!");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("The entered expression has a syntax error...");
-                    alert.showAndWait();
-                    input.setText("0");
-                    expr = "";
-                    tokens = new LinkedList<>();
+                    showAlert("Error!", "The entered expression has a syntax error...");
                 }
             }
         } else {
             setInput(btnText);
         }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+        input.setText("0");
+        expr = "";
+        tokens = new LinkedList<>();
     }
 
     /**

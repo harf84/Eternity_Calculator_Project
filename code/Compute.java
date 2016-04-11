@@ -144,7 +144,10 @@ public class Compute {
      * @param x a double
      * @return double corresponding to _/x
      */
-    public double squareRoot(double x) {
+    public double squareRoot(double x) throws ComputationException {
+        if(x == 0) {
+            throw new ComputationException("The square root of 0 cannot be computed.");
+        }
         return nthRoot(2, x);
     }
 
@@ -160,7 +163,10 @@ public class Compute {
     /**
      * Logarithms
      */
-    private double logN(double z) {
+    private double logN(double z) throws ComputationException {
+        if(z == 0) {
+            throw new ComputationException("Log of 0 cannot be computed.");
+        }
         return logNHelper(z);
     }
 
@@ -204,7 +210,9 @@ public class Compute {
      * @param x double representing a power
      * @return double corresponding to log10(x)
      */
-    public double log10(double x) { return logN(x) / logN(10); }
+    public double log10(double x) throws ComputationException {
+        return logN(x) / logN(10);
+    }
 
     /**
      * Compute ln2, pi
@@ -243,7 +251,7 @@ public class Compute {
      * @param angle in degrees
      * @return double corresponding to sin(angle). The method converts the angle to radians prior to computation.
      */
-    public double sin(double angle) {
+    public double sin(double angle) throws ComputationException {
         double ang = angle % 360; //make in range of 360
         double ang2 = ang % 180; //make in range of 180
         //source:http://mathonweb.com/help_ebook/html/algorithms.htm
@@ -267,7 +275,10 @@ public class Compute {
      * @param val a non-floating point double
      * @return double Factorial of val.
      */
-    public double factorial(double val) {
+    public double factorial(double val) throws ComputationException {
+        if(val == 0) {
+            throw new ComputationException("Factorial of 0 cannot be computed.");
+        }
         if (val == 1) return val;
         return val * factorial(val - 1);
     }

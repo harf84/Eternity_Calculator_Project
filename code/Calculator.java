@@ -27,7 +27,7 @@ public class Calculator {
 	 * @return String output of evaluated expression
 	 * Converts tokens infix queue to postfix queue then evaluates the expression.
 	 */
-	public String evalTokens (Queue <String> tokens){
+	public String evalTokens (Queue <String> tokens) throws ComputationException {
 		postfix = infixToPostfix(tokens);
 		postfix.forEach(System.out::print);
 		double d = evaluate();
@@ -103,7 +103,7 @@ public class Calculator {
 	 * The expression is computed based on operator priority. Special functions are computed using an instance of
 	 * the Compute class.
 	 */
-	public double evaluate (){
+	public double evaluate () throws ComputationException {
 		double val = 0;
 		Stack <Double> operands = new Stack<>();
 		if (postfix.size() == 1)operands.push(Double.parseDouble((String) postfix.poll()));
